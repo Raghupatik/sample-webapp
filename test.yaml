@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-deployment
+  namespace: bobbala
+  labels:
+    app: dotnetdemo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dotnetdemo
+  template:
+    metadata:
+      labels:
+        app: dotnetdemo
+    spec:
+      containers:
+      - name: dotnetdemo
+        image: saibobbala1569/dotnetdemo:1.0.1
+        ports:
+        - containerPort: 80
