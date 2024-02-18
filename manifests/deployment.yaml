@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name:  walmartpayment-dev
-  namespace: walmartdev
+  namespace: testnamespace
   labels:
     app:  walmartpayment-dev
 spec:
@@ -26,7 +26,7 @@ spec:
           # - Each init container must complete successfully before the next one starts.
       containers:
       - name:  walmartpayment-dev
-        image:  bermtecacrshared1.azurecr.io/dotnetdemo:latest
+        image:  testberm.azurecr.io/testdemo:0.0.0
         resources:
           requests:
             cpu:  100m
@@ -57,3 +57,6 @@ spec:
           name:  walmartdev
         imagePullPolicy: Always
       restartPolicy: Always
+      imagePullSecrets:
+        - name: test
+      

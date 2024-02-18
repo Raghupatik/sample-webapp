@@ -17,6 +17,10 @@ public class PingController : ControllerBase
     [HttpGet]
     public string Get()
     {
-       return "Server is Healthy";
+
+        // connect to db
+
+        // server , username, password
+        return "Server is Healthy";
     }
 }

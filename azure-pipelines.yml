@@ -9,7 +9,7 @@ variables:
 
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'f8641c5b-81c6-4334-9da8-787d86116a3e'
-  imageRepository: 'dotnetdemo'
+  imageRepository: $(blahbjasb)
   containerRegistry: 'bermtecacrshared1.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
@@ -51,10 +51,12 @@ stages:
     pool:
       vmImage: $(vmImageName)
     environment: 'Raghupatikdotnetdemo-1071.walmartdev'
+    condition: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
     strategy:
       runOnce:
         deploy:
           steps:
+          - template: templates/shared.yml 
           - task: KubernetesManifest@0
             displayName: Create imagePullSecret
             inputs:

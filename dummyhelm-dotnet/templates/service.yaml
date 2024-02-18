@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dummyhelm-dotnet.fullname" . }}
+  labels:
+    {{- include "dummyhelm-dotnet.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dummyhelm-dotnet.selectorLabels" . | nindent 4 }}
