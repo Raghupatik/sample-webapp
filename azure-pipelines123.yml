@@ -26,6 +26,15 @@ steps:
     publishWebProjects: true
   displayName: 'dotnet build $(buildConfiguration)'
 
+- task: Docker@2
+  inputs:
+    containerRegistry: 'test'
+    repository: 'dotnetdemo'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: |
+      $(Build.BuildId)
+      latest
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'Azure subscription 1(1)(77b45418-7fb5-4763-bc5c-fa8dccc10889)'
