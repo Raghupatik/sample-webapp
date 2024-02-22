@@ -10,28 +10,35 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
+stages:
+- stage: build
+  jobs:
+  - job: Build
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration)'
+      displayName: 'build'
 
-steps:
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration)'
-  displayName: 'dotnet build $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        arguments: '--configuration $(buildConfiguration)'
+        publishWebProjects: true
+      displayName: 'Publish'
 
   
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    arguments: '--configuration $(buildConfiguration)'
-    publishWebProjects: true
-  displayName: 'dotnet build $(buildConfiguration)'
-
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: 'Azure subscription 1(1)(77b45418-7fb5-4763-bc5c-fa8dccc10889)'
-    appType: 'webAppLinux'
-    appName: 'amazondev'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    runtimeStack: 'DOTNETCORE|6.0'
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    steps:
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(1)(77b45418-7fb5-4763-bc5c-fa8dccc10889)'
+        appType: 'webAppLinux'
+        appName: 'amazondev'
+        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        runtimeStack: 'DOTNETCORE|6.0'
 
 
