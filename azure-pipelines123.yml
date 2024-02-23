@@ -34,7 +34,12 @@ stages:
         organization: 'raghu-testing'
         scannerMode: 'MSBuild'
         projectKey: 'raghu-testing_dotnetdemo'
-    
+        projectName: 'dotnetdemo'
+        extraProperties: |
+          sonar.exclusions=**/*.bin
+          sonar.host.url=https://sonarcloud.io
+
+        
     - task: SonarCloudPublish@1
       inputs:
         pollingTimeoutSec: '300'
