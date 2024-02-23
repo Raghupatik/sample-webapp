@@ -32,7 +32,6 @@ stages:
       inputs:
         SonarCloud: 'Test'
         organization: 'raghu-testing'
-        scannerMode: 'MSBuild'
         projectKey: 'raghu-testing_dotnetdemo'
         projectName: 'dotnetdemo'
         extraProperties: |
