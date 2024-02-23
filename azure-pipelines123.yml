@@ -37,13 +37,15 @@ stages:
         projectName: 'dotnetdemo'
         extraProperties: |
           sonar.exclusions=**/*.bin
-          sonar.host.url=https://sonarcloud.io
 
-        
+    
+    - task: SonarCloudAnalyze@1
+      displayName: 'Sonar Analyze'
+
     - task: SonarCloudPublish@1
       inputs:
         pollingTimeoutSec: '300'
-
+        
 - stage: docker
   jobs:
   - job: DockerBuilandpush
