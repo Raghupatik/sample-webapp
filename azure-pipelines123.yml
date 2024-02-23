@@ -33,7 +33,7 @@ stages:
         SonarCloud: 'Test'
         organization: 'raghu-testing'
         scannerMode: 'MSBuild'
-        projectKey: 'dotnetdemo'
+        projectKey: 'raghu-testing_dotnetdemo'
     
     - task: SonarCloudPublish@1
       inputs:
