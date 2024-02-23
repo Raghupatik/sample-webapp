@@ -27,6 +27,17 @@ stages:
         arguments: '--configuration $(buildConfiguration)'
         publishWebProjects: true
       displayName: 'Publish'
+    
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'Test'
+        organization: 'raghu-testing'
+        scannerMode: 'MSBuild'
+        projectKey: 'dotnetdemo'
+    
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
 
 - stage: docker
   jobs:
