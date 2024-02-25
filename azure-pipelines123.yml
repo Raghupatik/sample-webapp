@@ -1,0 +1,80 @@
+trigger:
+   - feature/*
+   - main
+   - develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+
+variables:
+  buildConfiguration: 'Release'
+
+stages:
+- stage: build
+  jobs:
+  - job: Build
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration)'
+      displayName: 'build'
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        arguments: '--configuration $(buildConfiguration)'
+        publishWebProjects: true
+      displayName: 'Publish'
+    
+        
+- stage: docker
+  jobs:
+  - job: DockerBuilandpush
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'amazontest'
+        repository: 'dotnet'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'  
+
+- stage: DeployToTest
+  jobs:
+  - job: DeployToTest
+    steps:
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(1)(77b45418-7fb5-4763-bc5c-fa8dccc10889)'
+        appType: 'webAppLinux'
+        appName: 'amazondev'
+        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        runtimeStack: 'DOTNETCORE|6.0'
+
+- stage: DeployToStage
+  jobs:
+  - job: DeployToStage
+    steps:
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(1)(77b45418-7fb5-4763-bc5c-fa8dccc10889)'
+        appType: 'webAppLinux'
+        appName: 'amazondev'
+        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        runtimeStack: 'DOTNETCORE|6.0'
+
+- stage: DeployToProd
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  jobs:
+  - job: DeployToProd
+    steps:
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(1)(77b45418-7fb5-4763-bc5c-fa8dccc10889)'
+        appType: 'webAppLinux'
+        appName: 'amazondev'
+        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        runtimeStack: 'DOTNETCORE|6.0'
+
+
